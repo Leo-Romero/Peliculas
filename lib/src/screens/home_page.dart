@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:peliculas/src/providers/peliculas_provider.dart';
+import 'package:peliculas/src/widgets/card_swiper_widget.dart';
 
 class HomePage extends StatelessWidget {
+  final peliculasProvider = new PeliculasProvider();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,21 +32,18 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _swiperTarjetas() {
-    return Container(
-      padding: EdgeInsets.only(top: 10.0),
-      width: double.infinity,
-      height: 300.0,
-      child: Swiper(
-        layout: SwiperLayout.STACK,
-        itemWidth: 200.0,
-        itemBuilder: (BuildContext context, int index) {
-          return new Image.network('http://via.placeholder.com/350x150',
-              fit: BoxFit.fill);
-        },
-        itemCount: 3,
-        //pagination: new SwiperPagination(),
-        //control: new SwiperControl(),
-      ),
+    return FutureBuilder(
+      future: peliculasProvider.getEnCines(),
+      builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+        if (snapshot.hasData) {
+          return CardSwiper(
+            peliculas: snapshot.data,
+          );
+        } else {
+          return Container(
+              height: 400.0, child: Center(child: CircularProgressIndicator()));
+        }
+      },
     );
   }
 }
