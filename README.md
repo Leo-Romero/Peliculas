@@ -1,5 +1,7 @@
 # peliculas
 
+del curso de Fernando Herrera
+
 A new Flutter project.
 
 ## Getting Started
